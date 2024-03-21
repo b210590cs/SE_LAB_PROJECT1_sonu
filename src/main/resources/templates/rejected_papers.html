@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Accepted Papers</title>
+    <style>
+       body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url("https://t3.ftcdn.net/jpg/02/76/99/22/240_F_276992286_z5JBDiYuwb9J83F2qnGaJAEeY4ybjDqY.jpg");
+            color: white;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+        }
+
+        h2 {
+            color: white;
+            text-align: center;
+        }
+
+        footer {
+            color: white; /* Replace #00ff00 with your desired color code */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            background-color: #555;
+            margin-right: 10px;
+        }
+
+        nav a:hover {
+            background-color: #777;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        #rejected-papers-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #rejected-papers-list li {
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            width: calc(33.33% - 20px); /* Adjust the width based on your preference */
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        #back-button {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="custom-header">
+            <h1>Programming Committee</h1>
+        </div>
+    </header>
+    <nav>
+        <a href="/dashboard">Home</a>
+        <a href="/reviewers">Reviewers</a>
+        <a href="/home">Reviewed Papers</a>
+        <a href="/assignreviewers">Unreviewed Papers</a>
+        <a href="/acceptedpapers">Accepted Papers</a>
+        <a href="/rejectedpapers">Rejected Papers</a>
+    </nav>
+    <main>
+      <h1>Rejected Papers</h1>
+<ul id="rejected-papers-list">
+    <li th:each="paper : ${rejectedPapers}" style="margin-bottom: 10px;">
+        <div>
+            <span th:text="${paper.title}" style="font-weight: bold; display: block;"></span>
+            <span th:text="'Authors: ' + ${paper.author1} + ', ' + ${paper.author2}" style="display: block;"></span>
+        </div>
+    </li>
+</ul>
+
+    </main>
+    <footer>
+        <!-- Footer content -->
+    </footer>
+</body>
+
+</html>

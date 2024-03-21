@@ -1,4 +1,4 @@
-package com.example.demo.Entity;
+package com.example.demo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Table(name = "users")
 //@Table(name = "users"): Specifies the name of the database table to which this entity is mapped.
 
-public class User {
+public class User{
 
 	@Id
 	//@Id: Specifies the primary key of the entity.

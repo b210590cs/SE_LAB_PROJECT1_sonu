@@ -111,7 +111,7 @@
                 <a href="/reviewers">Reviewers</a>
                 <a href="/home">Reviewed Papers</a>
                 <a href="/assignreviewers">Unreviewed Papers</a>
-                <a href="/accepted">Accepted Papers</a>
+                <a href="/acceptedpapers">Accepted Papers</a>
                 <a href="/rejectedpapers">Rejected Papers</a>
             </nav>
 
@@ -147,49 +147,90 @@
                     authorP.textContent = `Authors: ${paper.author1}, ${paper.author2}`;
                     paperDetailsDiv.appendChild(authorP);
 
-                    const label = document.createElement('label');
-                    label.for = `reviewer${index + 1}`;
-                    label.className = 'dropdown';
-                    label.textContent = 'Select Reviewer:';
-                    paperDetailsDiv.appendChild(label);
+                    for (let i = 1; i <= 3; i++) { // Loop to create 3 dropdowns
+                        const label = document.createElement('label');
+                        label.for = `reviewer${index + 1}_${i}`;
+                        label.className = 'dropdown';
+                        label.textContent = `Select Reviewer ${i}:`;
+                        paperDetailsDiv.appendChild(label);
 
-                    const dropdown = document.createElement('select');
-                    dropdown.id = `reviewer${index + 1}`;
-                    dropdown.className = 'dropdown';
+                        const dropdown = document.createElement('select');
+                        dropdown.id = `reviewer${index + 1}_${i}`;
+                        dropdown.className = 'dropdown';
 
-                    fetch('/api/reviewers')
-                        .then(response => response.json())
-                        .then(reviewers => {
-                            reviewers.forEach(reviewer => {
-                                const option = document.createElement('option');
-                                option.value = reviewer.name1;
-                                option.textContent = reviewer.name1;
-                                dropdown.appendChild(option.cloneNode(true));
-                            });
-                        })
-                        .catch(error => console.error('Error fetching reviewer names:', error));
+                        fetch('/api/reviewers')
+                            .then(response => response.json())
+                            .then(reviewers => {
+                                reviewers.forEach(reviewer => {
+                                    const option = document.createElement('option');
+                                    option.value = reviewer.name1;
+                                    option.textContent = reviewer.name1;
+                                    dropdown.appendChild(option.cloneNode(true));
+                                });
+                            })
+                            .catch(error => console.error('Error fetching reviewer names:', error));
 
-                    paperDetailsDiv.appendChild(dropdown);
+                        paperDetailsDiv.appendChild(dropdown);
+                    }
 
                     const assignButton = document.createElement('button');
                     assignButton.type = 'button';
                     assignButton.className = 'button';
-                    assignButton.textContent = 'Assign Reviewer';
-                    assignButton.onclick = () => {
-                        const selectedReviewer = document.getElementById(`reviewer${index + 1}`).value;
+                    assignButton.textContent = 'Assign Reviewers';
+assignButton.onclick = () => {
+    const selectedReviewers = [];
+    for (let i = 1; i <= 3; i++) {
+        const selectedReviewer = document.getElementById(`reviewer${index + 1}_${i}`).value;
+        selectedReviewers.push(selectedReviewer);
+    }
 
-                        if (hasReachedReviewLimit(selectedReviewer, reviewLimit)) {
-                            alert(`Reviewer ${selectedReviewer} has reached the review limit.`);
-                        } else {
-                            saveResponse({
-                                paperId: index + 1,
-                                action: 'Assign Reviewer',
-                                reviewer: selectedReviewer
-                            });
-                            alert(`Reviewer ${selectedReviewer} assigned for Paper ID: ${index + 1}`);
-                            // Implement additional logic if needed
-                        }
-                    };
+    // Check if any of the reviewers have reached the limit
+    let hasReachedLimit = false;
+    selectedReviewers.forEach(reviewer => {
+        if (hasReachedReviewLimit(reviewer, reviewLimit)) {
+            alert(`Reviewer ${reviewer} has reached the review limit.`);
+            hasReachedLimit = true;
+        }
+    });
+    if (!hasReachedLimit) {
+        const paperId = index + 1; // Assuming paper ID is retrieved from the UI
+         const selectedReviewers = [];
+for (let i = 1; i <= 3; i++) {
+    const selectedReviewer = document.getElementById(`reviewer${index + 1}_${i}`).value;
+    selectedReviewers.push(selectedReviewer);
+}
+console.log("Paper ID:", paperId);
+    console.log("Selected Reviewers:", selectedReviewers);
+
+        fetch('/api/assign_reviewers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                paperId: paperId,
+                reviewers: selectedReviewers
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Reviewers assigned successfully:', data);
+            alert(`Reviewers assigned for Paper ID: ${paperId}`);
+            // Implement additional logic if needed
+        })
+        .catch(error => {
+            console.error('Error assigning reviewers:', error);
+            alert('An error occurred while assigning reviewers.');
+        });
+    }
+};
+
+    
 
                     paperDetailsDiv.appendChild(assignButton);
 
@@ -235,15 +276,16 @@
         }
 
         function hasReachedReviewLimit(reviewer, limit) {
-            const savedResponses = JSON.parse(localStorage.getItem('savedResponses')) || [];
-            const reviewerReviews = savedResponses.filter(response => response.reviewer === reviewer);
-            return reviewerReviews.length >= limit;
-        }
+    // Assuming the review limit check is based on the saved responses in local storage
+    const savedResponses = JSON.parse(localStorage.getItem('savedResponses')) || [];
+    const reviewerReviews = savedResponses.filter(response => response.reviewers.includes(reviewer));
+    return reviewerReviews.length >= limit;
+}
 
         function navigateToResponsesPage() {
             window.location.href = "responses";
         }
-        
+
         function clearSavedResponses() {
             if (confirm('Are you sure you want to clear all saved responses?')) {
                 localStorage.removeItem('savedResponses');

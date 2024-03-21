@@ -1,7 +1,6 @@
 package com.example.demo.SecurityConfiguration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; 
 
-//org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: This class is used for password encoding using the BCrypt hashing algorithm.
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class PasswordEncoder {
 

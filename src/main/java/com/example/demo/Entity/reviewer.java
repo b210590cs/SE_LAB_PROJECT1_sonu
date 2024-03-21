@@ -18,6 +18,8 @@ public class reviewer {
     private String Name1;
     private String expertise_field;
     private String contact;
+    private String email;
+    
 
     public Long getId() {
         return id;
@@ -50,6 +52,13 @@ public class reviewer {
     public void setContact(String contact) {
         this.contact = contact;
     }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
 }
 
 

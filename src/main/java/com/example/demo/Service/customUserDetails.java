@@ -1,18 +1,18 @@
 package com.example.demo.Service;
-//pakage- com.example.demo.Service
+
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.demo.Entity.User;
-//class- customUserDetails
-//implements UserDetails: Interface representing a user's details in Spring Security.
+import com.example.demo.entity.User;
+
+
 public class customUserDetails implements UserDetails {
 
 	private User user;
-	//user (Type: User): The User entity associated with the user details.
+	
 	
 	//Constructs a new customUserDetails instance with the provided User entity.
 	public customUserDetails(User user) {

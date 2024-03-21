@@ -167,7 +167,7 @@
         
         <a href="/home"></span> Reviewed Papers</a>
         <a href="/assignreviewers"></span> Unreviewed Papers</a>
-        <a href="/accepted"></span> Accepted Papers</a>
+        <a href="/acceptedpapers"></span> Accepted Papers</a>
         <a href="/rejectedpapers"></span> Rejected Papers</a>
 
     </nav>
@@ -268,14 +268,51 @@
             document.getElementById("choose-decision-popup").style.display = "flex";
         }
 
-        function submitDecision(decision) {
+        /*function submitDecision(decision) {
             const title = document.getElementById("choose-decision-title-popup").innerText;
             localStorage.setItem(title, decision);
 
             alert("Decision: " + decision);
             closeChooseDecisionPopup();
             // No need to redirect here; it will happen on the next Choose Decision
+        }*/
+        function submitDecision(decision) {
+    const title = document.getElementById("choose-decision-title-popup").innerText;
+
+    // Prepare data to send to the server
+    const data = {
+        title: title,
+        decision: decision
+    };
+
+    // Make a POST request to the server
+    fetch('/api/submissions/updateDecision', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+})
+    .then(response => response.json())
+    .then(result => {
+        // Handle the result if needed
+        console.log(result);
+        alert("Decision successfully updated in the database: " + decision);
+        closeChooseDecisionPopup();
+        
+        if (decision === 'accept') {
+            window.location.href = "/acceptedpapers";
+        } else if (decision === 'reject') {
+            window.location.href = "/rejectedpapers";
         }
+    
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Failed to update decision in the database.");
+    });
+}
+
 
         function closeViewDetailsPopup() {
             document.getElementById("view-details-popup").style.display = "none";
