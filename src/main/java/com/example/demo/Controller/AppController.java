@@ -4,13 +4,16 @@ package com.example.demo.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.Entity.User;
+import com.example.demo.Repository.ReviewerRepository;
 import com.example.demo.Repository.UserRepository;
 
 //class- AppController
@@ -76,10 +79,10 @@ public class AppController {
     public String dashboard() {
         return "dashboard"; 
     }
-    @GetMapping("/assignreviewers")
-    public String assignreviewers() {
-        return "assignreviewers"; 
-    }
+    // @GetMapping("/assignreviewers")
+    // public String assignreviewers() {
+    //     return "assignreviewers"; 
+    // }
     @GetMapping("/rejectedpapers")
     public String rejectedpapers() {
         return "rejectedpapers";

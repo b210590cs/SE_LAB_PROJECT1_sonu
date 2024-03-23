@@ -18,7 +18,7 @@ public class SecurityConfiguration   {
      
     @Bean
     //@Bean: Indicates that a method produces a bean to be managed by the Spring container.
-    UserDetailsService userDetailsService() {
+    customUserDetailsService userDetailsService() {
         return new customUserDetailsService();
     }
     //userDetailsService(): Returns an instance of customUserDetailsService to handle user details retrieval.

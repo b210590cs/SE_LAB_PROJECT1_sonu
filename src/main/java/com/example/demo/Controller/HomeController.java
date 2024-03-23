@@ -1,7 +1,8 @@
-package com.example.demo.controller;
+package com.example.demo.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.model.Reviewer;
 import com.example.demo.model.Submissions;
-import com.example.demo.repository.ReviewerRepository;
-import com.example.demo.repository.SubmissionsRepository;
+import com.example.demo.Repository.ReviewerRepository;
+import com.example.demo.Repository.SubmissionsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/home")
 public class HomeController {
 
     @Autowired
@@ -172,6 +173,5 @@ public class HomeController {
             }
         }
     }
-    
-    
+       
 }

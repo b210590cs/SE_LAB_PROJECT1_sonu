@@ -12,11 +12,9 @@ public class SeLabProjectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SeLabProjectApplication.class, args);
+        System.out.println("application");
     }
 
-
-
 }
 
-}
 

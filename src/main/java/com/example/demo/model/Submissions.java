@@ -17,6 +17,9 @@ public class Submissions {
 
     @Column(name = "title")
     private String title;
+    @Column(name = "expertise")
+    private String expertise;
+    
 
     @Column(name = "author1")
     private String author1;
@@ -32,8 +35,11 @@ public class Submissions {
 
     @Column(name = "review2", columnDefinition = "TEXT")
     private String review2;
+    @Column(name = "status")
+    private String status;
 
     // Constructors
+
 
     public Submissions() {
         // Default constructor needed by JPA
@@ -104,5 +110,20 @@ public class Submissions {
 
     public void setReview2(String review2) {
         this.review2 = review2;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public String getExpertise() {
+        return expertise;
+    }
+
+    public void setExpertise(String expertise) {
+        this.expertise = expertise;
     }
 }

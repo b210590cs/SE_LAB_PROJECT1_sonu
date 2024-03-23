@@ -1,266 +1,459 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assign Reviewer</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-KyZXEAg3QhqLMpMIHdGQ8tNqQJ2z9qgx4lUAf3/70p5p1K6L6p61Upc9lEmntqXuSgyjgTFPKvmqD2U6u3/eGg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: white;
             margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-image: url("https://t3.ftcdn.net/jpg/02/76/99/22/240_F_276992286_z5JBDiYuwb9J83F2qnGaJAEeY4ybjDqY.jpg");
+            height: 100vh;
+            color: #fff;
         }
 
-        .container {
-            width: 80%;
-            margin: 20px auto;
-            border: 5px solid grey;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
+       
+
+        #menu-toggle {
+            display: none;
         }
 
-        h2 {
-            color: grey;
+        #menu-icon {
+            cursor: pointer;
+            font-size: 24px;
+            margin-left: 20px;
+            z-index: 3;
+            /* Ensure menu icon is above the content */
+        }
+
+        
+
+        nav a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #ecf0f1;
+            /* Navigation text color */
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            transition: 0.3s;
+        }
+
+       
+
+        
+
+        nav .back-icon {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 24px;
+        }
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(90deg, #2c3e50, #34495e);
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+       
+        .dashboard-container {
             text-align: center;
-        }
-        .button-container button {
-            margin-right: 10px;
+            padding: 30px;
         }
 
-        .section {
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
         }
 
-        .button {
-            background-color: grey;
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+            background: #2c3e50;
+        }
+
+        th {
+            background: #34495e;
             color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
-        .paper-details {
-            margin-bottom: 10px;
-        }
-
-        .paper-details {
-            margin-bottom: 10px;
-        }
-
-        .dropdown {
-            width: 100%;
-            padding: 5px;
-            margin-bottom: 10px;
-        }
-
-        #back-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px;
-            background-color: #555;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #back-button:hover {
-            background-color: #777;
-        }
-
-        .dropdown {
-            width: 100%;
-            padding: 5px;
-            margin-bottom: 10px;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        nav a {
-            color: white;
+        .abstract-link,
+        .comments-link {
+            color: #3498db;
             text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            background-color: #555;
-            margin-right: 10px;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
         }
 
-        nav a:hover {
-            background-color: #777;
+        .abstract-link:hover,
+        .comments-link:hover {
+            color: #1c92d2;
         }
+
+        .abstract-popup,
+        .comments-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: #2c3e50;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow-y: auto;
+            max-height: 70vh;
+            position: relative;
+        }
+
+        .close-popup {
+            cursor: pointer;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        #popupImage {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hu {
+            text-align: center;
+            margin-left: 40vw;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            /* Align items vertically in the center */
+        }
+
+        .navH {
+            margin: 15px 0px 25px 25px;
+        }
+
+        .cardH {
+            font-size: 19px;
+        }
+
         
+
+        
+
+        
+
+        .proH {
+            color: white;
+            font-family: "Roboto";
+
+        }
+
+
+        @media (min-width: 768px) {
+            .dashboard-links {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .class0, .class1{
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+}
+
+h1{
+    color: grey;
+}
+button{
+    color: rgb(252, 252, 252);
+    text-align: center;
+    text-decoration: double;
+    width: 10rem;
+    height: 2rem;
+    /* padding: 1rem; */
+    margin-right: 5px;
+    background-color: rgb(120, 118, 118);
+    border-radius: 5px;
+}
+
+.class3{
+    width:30rem;
+    height: 2rem;
+}
+
+.class6{
+    color: black;
+}
+
+.class7{
+    margin-top: 2rem;
+    height: 2.5rem;
+}
+
     </style>
+    
 </head>
 
 <body>
-    <div class="container" data-review-limit="3">
-        <h2>Assign Reviewer</h2>
-        <div class="section" id="papersSection">
 
-            <nav>
-                <a href="/dashboard">Home</a>
-                <a href="/reviewers">Reviewers</a>
-                <a href="/home">Reviewed Papers</a>
-                <a href="/assignreviewers">Unreviewed Papers</a>
-                <a href="/accepted">Accepted Papers</a>
-                <a href="/rejectedpapers">Rejected Papers</a>
-            </nav>
-
-            <!-- Paper sections will be dynamically added here -->
-        </div>
-    </div>
-
-    <script>
-        fetch('/api/submissions')
-            .then(response => response.json())
-            .then(papers => {
-                const papersSection = document.getElementById('papersSection');
-                const container = document.querySelector('.container');
-                const reviewLimit = container.dataset.reviewLimit;
-
-                papers.forEach((paper, index) => {
-                    const form = document.createElement('form');
-                    form.action = '/assignreviewers';
-                    form.method = 'POST';
-
-                    const paperDetailsDiv = document.createElement('div');
-                    paperDetailsDiv.className = 'paper-details';
-
-                    const paperIdP = document.createElement('p');
-                    paperIdP.textContent = `Paper ID: ${index + 1}`;
-                    paperDetailsDiv.appendChild(paperIdP);
-
-                    const titleP = document.createElement('p');
-                    titleP.textContent = `Title: ${paper.title}`;
-                    paperDetailsDiv.appendChild(titleP);
-
-                    const authorP = document.createElement('p');
-                    authorP.textContent = `Authors: ${paper.author1}, ${paper.author2}`;
-                    paperDetailsDiv.appendChild(authorP);
-
-                    const label = document.createElement('label');
-                    label.for = `reviewer${index + 1}`;
-                    label.className = 'dropdown';
-                    label.textContent = 'Select Reviewer:';
-                    paperDetailsDiv.appendChild(label);
-
-                    const dropdown = document.createElement('select');
-                    dropdown.id = `reviewer${index + 1}`;
-                    dropdown.className = 'dropdown';
-
-                    fetch('/api/reviewers')
-                        .then(response => response.json())
-                        .then(reviewers => {
-                            reviewers.forEach(reviewer => {
-                                const option = document.createElement('option');
-                                option.value = reviewer.name1;
-                                option.textContent = reviewer.name1;
-                                dropdown.appendChild(option.cloneNode(true));
-                            });
-                        })
-                        .catch(error => console.error('Error fetching reviewer names:', error));
-
-                    paperDetailsDiv.appendChild(dropdown);
-
-                    const assignButton = document.createElement('button');
-                    assignButton.type = 'button';
-                    assignButton.className = 'button';
-                    assignButton.textContent = 'Assign Reviewer';
-                    assignButton.onclick = () => {
-                        const selectedReviewer = document.getElementById(`reviewer${index + 1}`).value;
-
-                        if (hasReachedReviewLimit(selectedReviewer, reviewLimit)) {
-                            alert(`Reviewer ${selectedReviewer} has reached the review limit.`);
-                        } else {
-                            saveResponse({
-                                paperId: index + 1,
-                                action: 'Assign Reviewer',
-                                reviewer: selectedReviewer
-                            });
-                            alert(`Reviewer ${selectedReviewer} assigned for Paper ID: ${index + 1}`);
-                            // Implement additional logic if needed
-                        }
-                    };
-
-                    paperDetailsDiv.appendChild(assignButton);
-
-                    const buttonSpacer = document.createElement('span');
-                    buttonSpacer.style.marginRight = '10px';
-                    paperDetailsDiv.appendChild(buttonSpacer);
-
-                    const deadlineButton = document.createElement('button');
-                    deadlineButton.type = 'button';
-                    deadlineButton.className = 'button';
-                    deadlineButton.textContent = 'Set Deadline';
-                    deadlineButton.onclick = () => {
-                        const day = prompt('Enter day for deadline (1-31):');
-                        const month = prompt('Enter month for deadline (1-12):');
-                        const year = prompt('Enter year for deadline:');
-                        const deadline = new Date(year, month - 1, day);
-
-                        if (!isNaN(deadline.getTime())) {
-                            saveResponse({
-                                paperId: index + 1,
-                                action: 'Set Deadline',
-                                deadline: deadline.toDateString()
-                            });
-                            alert(`Deadline set for Paper ID: ${index + 1} - ${deadline.toDateString()}`);
-                            // Implement additional logic if needed
-                        } else {
-                            alert('Invalid date. Please enter a valid date for the deadline.');
-                        }
-                    };
-                    paperDetailsDiv.appendChild(deadlineButton);
-
-                    form.appendChild(paperDetailsDiv);
-                    papersSection.appendChild(form);
-                });
-            })
-            .catch(error => console.error('Error fetching paper details:', error));
-
-        function saveResponse(response) {
-            const savedResponses = JSON.parse(localStorage.getItem('savedResponses')) || [];
-            savedResponses.push(response);
-            localStorage.setItem('savedResponses', JSON.stringify(savedResponses));
-            alert('Response saved successfully.');
-        }
-
-        function hasReachedReviewLimit(reviewer, limit) {
-            const savedResponses = JSON.parse(localStorage.getItem('savedResponses')) || [];
-            const reviewerReviews = savedResponses.filter(response => response.reviewer === reviewer);
-            return reviewerReviews.length >= limit;
-        }
-
-        function navigateToResponsesPage() {
-            window.location.href = "responses";
-        }
-        
-        function clearSavedResponses() {
-            if (confirm('Are you sure you want to clear all saved responses?')) {
-                localStorage.removeItem('savedResponses');
-                alert('Saved responses cleared successfully.');
-            }
-        }
-    </script>
-    <div style="margin-top: 10px;">
+    <body class="container">
+        <h1 class="class0">Assign Reviewer</h1>
+        <div class="class1">
+            <a href="/dashboard"><button>Home</button></a>
+            <a href="/reviewers"><button>Reviewers</button></a>
+            <a href="/home"><button>Reviewed Papers</button></a>
+            <a href="/assignreviewers"><button>Unreviewed Papers</button></a>
+            <a href="/accepted"><button>Accepted Papers</button></a>
+            <a href="/rejectedpapers"><button>Rejected Papers</button></a>
     
-    <button style="margin-right: 10px;" onclick="clearSavedResponses()">Clear Saved Responses</button>
+        </div>
+    
+    
+    <main>
+        <div class="dashboard-container">
+           
+            <table>
+                
+                <tbody>
+                    <tr th:each="submissions: ${unreviewedPapers}">
+                        <p>PAPER ID: <span th:text="${submissions.id}"></span></p>
+                        <p>TITLE: <span th:text="${submissions.title}"></span></p>
+                        <p>AUTHOR: <span th:text="${submissions.author1}"></span></p>
+                       <p class="assign-reviewers-link">
+    <select class="reviewers-select" style="background: #3498db; color: #fff; padding: 8px; border: none; border-radius: 5px;">
+    <option value="none" selected>None</option>
+    <option th:each="reviewer : ${reviewersList}" th:if="${reviewer.expertise_field == submissions.expertise}" th:value="${reviewer.id}" th:text="${reviewer.Name1 + '|' + reviewer.expertise_field}"></option>
+</select>
+
+    
+     
+</p>
+<button class="add-reviewer-btn" th:attr="onclick='assignReviewers(\'' + ${submissions.id} + '\', this)'">Assign Reviewers</button>
+                        
+                    <tr>
 
 
-    <button style="margin-right: 10px;" onclick="navigateToResponsesPage()">View Responses</button>
+                    <!-- Add more rows with dummy information and abstract links as needed -->
+                </tbody>
+            </table>
+            
 
-    <button id="back-button">Back</button>
-    </div>
 
+            <!-- Abstract Popup -->
+            <div id="abstractPopup" class="abstract-popup">
+                <div class="popup-content">
+                    <span class="close-popup" onclick="closePopup('abstractPopup')">&times;</span>
+                    <h3 id="popupTitle" style="color: #3498db;"></h3>
+                    <p id="popupAuthor" style="color: #fff;"></p>
+                    <img id="popupImage" src="" alt="Abstract" />
+                </div>
+            </div>
+
+            <!-- Comments Popup -->
+            <div id="commentsPopup" class="comments-popup">
+                <div class="popup-content">
+                    <span class="close-popup" onclick="closePopup('commentsPopup')">&times;</span>
+                    <h3 id="commentsTitle" style="color: #3498db;"></h3>
+                    <div id="commentsContent" style="color: #fff;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script th:inline="javascript">
+    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+        const menuIcon = document.getElementById('menu-icon');
+        const menuToggle = document.getElementById('menu-toggle');
+        const mainContent = document.querySelector('main');
+        const navMenu = document.querySelector('nav');
+
+        menuIcon.addEventListener('click', function() {
+            menuToggle.checked = !menuToggle.checked;
+            toggleMenuVisibility();
+        });
+
+        function toggleMenuVisibility() {
+            const isMenuOpen = menuToggle.checked;
+
+            if (isMenuOpen) {
+                menuIcon.style.visibility = 'hidden';
+            } else {
+                menuIcon.style.visibility = 'visible';
+            }
+
+            mainContent.style.marginLeft = isMenuOpen ? '250px' : '0';
+            navMenu.style.left = isMenuOpen ? '0' : '-250px';
+        }
+
+        function closeMenu() {
+            menuToggle.checked = false;
+            toggleMenuVisibility();
+        }
+
+        function showAbstract(title, author, imagePath) {
+            var popupTitle = document.getElementById('popupTitle');
+            var popupAuthor = document.getElementById('popupAuthor');
+            var popupImage = document.getElementById('popupImage');
+            var abstractPopup = document.getElementById('abstractPopup');
+
+            popupTitle.textContent = title;
+            popupAuthor.textContent = 'Author: ' + author;
+            popupImage.src = imagePath;
+
+            abstractPopup.style.display = 'flex';
+        }
+
+
+
+        function closePopup(popupId) {
+            var popup = document.getElementById(popupId);
+            popup.style.display = 'none';
+        }
+
+      function addReviewer(button) {
+    var td = button.parentNode;
+    var select = td.querySelector('.reviewers-select');
+    var newSelect = select.cloneNode(true);
+    newSelect.selectedIndex = 0; // Reset selection to "None"
+    
+    // Remove previously selected options from the new dropdown
+    var selectedOptions = td.parentNode.querySelectorAll('.reviewers-select');
+    selectedOptions.forEach(function(option) {
+        newSelect.querySelectorAll('option[value="' + option.value + '"]').forEach(function(el) {
+            el.parentNode.removeChild(el);
+        });
+    });
+    
+    // If only "None" option remains, display a warning message instead of adding a new dropdown
+    if (newSelect.querySelectorAll('option').length === 1) {
+        alert("All reviewers have been assigned.");
+    } else {
+        td.insertBefore(newSelect, button);
+        button.style.display = "inline-block"; // Ensure the "+" button remains visible after adding a new dropdown
+    }
+}
+
+
+
+
+      function assignReviewers(id, button) {
+    	    var td = button.parentNode;
+    	    var selects = td.querySelectorAll('.reviewers-select');
+
+    	    // Check if any reviewers are selected
+    	    var reviewersSelected = false;
+    	    var reviewerIds = [];
+    	    selects.forEach(function(select) {
+    	        if (select.value !== 'none') {
+    	            reviewersSelected = true;
+    	            reviewerIds.push(select.value);
+    	        }
+    	    });
+
+    	    if (!reviewersSelected) {
+    	        alert("Please assign reviewers.");
+    	        return; // Exit function if no reviewers are selected
+    	    }
+
+    	    var confirmation = confirm("Are you sure you want to assign these reviewers?");
+    	    if (confirmation) {
+    	        // Construct the data object to send to the backend
+    	        var data = {
+    	            paperId: id, // Include the paper ID
+    	            reviewerIds: reviewerIds // Include the selected reviewer IDs
+    	        };
+
+    	        // Send data to the backend (you'll need to replace the URL and method with your backend endpoint)
+    	        // Example AJAX request:
+    	        
+    	        fetch('/assignreviewers/' + id , {
+    	            method: 'PUT',
+    	            headers: {
+    	                'Content-Type': 'application/json',
+    	                [csrfHeader]: csrfToken
+    	            },
+    	            body: JSON.stringify(data)
+    	        })
+    	        .then(response => {
+    	            if (!response.ok) {
+    	                throw new Error('Network response was not ok');
+    	            }
+    	            // Handle successful response
+    	        })
+    	        .catch(error => {
+    	            console.error('There was a problem with the fetch operation:', error);
+    	        });
+    	        
+
+    	       
+
+    	        selects.forEach(function(select) {
+    	            if (select.value !== 'none') {
+    	                var reviewer = select.options[select.selectedIndex].text.split('|')[0];
+    	                var topic = select.options[select.selectedIndex].text.split('|')[1];
+    	                var row = reviewersTable.insertRow();
+    	                var cell = row.insertCell();
+    	                cell.textContent = reviewer;
+    	                cell = row.insertCell();
+    	                cell.textContent = topic;
+    	            }
+    	        });
+
+    	        // Replace the content in the "Assign Reviewers" column with the table
+    	        td.innerHTML = '';
+    	        td.appendChild(reviewersTable);
+
+    	        // Move the table row to the "Reviewed Papers" section after 10 seconds
+    	        setTimeout(function() {
+    	            var tr = td.parentNode;
+    	            tr.parentNode.removeChild(tr);
+    	            // Here you can add code to move the row to the "Reviewed Papers" section
+    	        }, 10000);
+    	    }
+    	}
+
+
+
+
+
+    </script>
 </body>
 
 </html>
