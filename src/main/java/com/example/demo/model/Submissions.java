@@ -35,8 +35,15 @@ public class Submissions {
 
     @Column(name = "review2", columnDefinition = "TEXT")
     private String review2;
+<<<<<<< HEAD
     @Column(name = "status")
     private String status;
+=======
+    
+    @Column(name = "status")
+    private String status;
+    
+>>>>>>> 418c0ab32669f93fd65a38fb095e059765122124
 
     // Constructors
 
@@ -111,7 +118,10 @@ public class Submissions {
     public void setReview2(String review2) {
         this.review2 = review2;
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> 418c0ab32669f93fd65a38fb095e059765122124
     public String getStatus() {
         return status;
     }
@@ -119,6 +129,7 @@ public class Submissions {
     public void setStatus(String status) {
         this.status = status;
     }
+<<<<<<< HEAD
     public String getExpertise() {
         return expertise;
     }
@@ -126,4 +137,7 @@ public class Submissions {
     public void setExpertise(String expertise) {
         this.expertise = expertise;
     }
+=======
+    
+>>>>>>> 418c0ab32669f93fd65a38fb095e059765122124
 }

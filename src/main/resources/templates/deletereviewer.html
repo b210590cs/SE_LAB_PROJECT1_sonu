@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reviewers</title>
+</head>
+<body>
+    <h1>List of Reviewers</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Field</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over the list of reviewers -->
+            <th:block th:each="reviewer : ${reviewers}">
+                <tr>
+                    <td th:text="${reviewer.id}"></td>
+                    <td th:text="${reviewer.name1}"></td>
+                    <td th:text="${reviewer.expertise_field}"></td>
+                    <td th:text="${reviewer.contact}"></td>
+                    <td th:text="${reviewer.email}"></td>
+                    <!-- Delete button -->
+                    <td>
+                        <form th:action="@{/api/reviewers/{id}(id=${reviewer.id})}" method="post">
+                            <input type="hidden" name="_method" value="delete">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+</body>
+</html>

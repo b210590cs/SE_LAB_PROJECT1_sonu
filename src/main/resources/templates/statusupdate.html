@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Decision</title>
+</head>
+<body>
+    <h2>Decide Acceptance or Rejection</h2>
+    <form action="/submitDecision" method="post" th:action="@{/submitDecision}">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <label for="paperName">Paper Name:</label>
+        <select name="paperName" id="paperName">
+            <option th:each="submission : ${allPapers}" th:value="${submission.title}" th:text="${submission.title}"></option>
+        </select><br><br>
+
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+            <option value="accept">Accept</option>
+            <option value="reject">Reject</option>
+        </select><br><br>
+
+        <button type="submit">Submit Decision</button>
+    </form>
+</body>
+</html>

@@ -17,4 +17,8 @@ public class SeLabProjectApplication {
 
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 418c0ab32669f93fd65a38fb095e059765122124
 

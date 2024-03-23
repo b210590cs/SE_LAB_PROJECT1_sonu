@@ -232,6 +232,7 @@ button{
 
 <body>
 
+<<<<<<< HEAD
     <body class="container">
         <h1 class="class0">Assign Reviewer</h1>
         <div class="class1">
@@ -241,6 +242,196 @@ button{
             <a href="/assignreviewers"><button>Unreviewed Papers</button></a>
             <a href="/accepted"><button>Accepted Papers</button></a>
             <a href="/rejectedpapers"><button>Rejected Papers</button></a>
+=======
+            <nav>
+                <a href="/dashboard">Home</a>
+                <a href="/reviewers">Reviewers</a>
+                <a href="/home">Reviewed Papers</a>
+                <a href="/assignreviewers">Unreviewed Papers</a>
+                <a href="/acceptedpapers">Accepted Papers</a>
+                <a href="/rejectedpapers">Rejected Papers</a>
+            </nav>
+
+            <!-- Paper sections will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        fetch('/api/submissions')
+            .then(response => response.json())
+            .then(papers => {
+                const papersSection = document.getElementById('papersSection');
+                const container = document.querySelector('.container');
+                const reviewLimit = container.dataset.reviewLimit;
+
+                papers.forEach((paper, index) => {
+                    const form = document.createElement('form');
+                    form.action = '/assignreviewers';
+                    form.method = 'POST';
+
+                    const paperDetailsDiv = document.createElement('div');
+                    paperDetailsDiv.className = 'paper-details';
+
+                    const paperIdP = document.createElement('p');
+                    paperIdP.textContent = `Paper ID: ${index + 1}`;
+                    paperDetailsDiv.appendChild(paperIdP);
+
+                    const titleP = document.createElement('p');
+                    titleP.textContent = `Title: ${paper.title}`;
+                    paperDetailsDiv.appendChild(titleP);
+
+                    const authorP = document.createElement('p');
+                    authorP.textContent = `Authors: ${paper.author1}, ${paper.author2}`;
+                    paperDetailsDiv.appendChild(authorP);
+
+                    for (let i = 1; i <= 3; i++) { // Loop to create 3 dropdowns
+                        const label = document.createElement('label');
+                        label.for = `reviewer${index + 1}_${i}`;
+                        label.className = 'dropdown';
+                        label.textContent = `Select Reviewer ${i}:`;
+                        paperDetailsDiv.appendChild(label);
+
+                        const dropdown = document.createElement('select');
+                        dropdown.id = `reviewer${index + 1}_${i}`;
+                        dropdown.className = 'dropdown';
+
+                        fetch('/api/reviewers')
+                            .then(response => response.json())
+                            .then(reviewers => {
+                                reviewers.forEach(reviewer => {
+                                    const option = document.createElement('option');
+                                    option.value = reviewer.name1;
+                                    option.textContent = reviewer.name1;
+                                    dropdown.appendChild(option.cloneNode(true));
+                                });
+                            })
+                            .catch(error => console.error('Error fetching reviewer names:', error));
+
+                        paperDetailsDiv.appendChild(dropdown);
+                    }
+
+                    const assignButton = document.createElement('button');
+                    assignButton.type = 'button';
+                    assignButton.className = 'button';
+                    assignButton.textContent = 'Assign Reviewers';
+assignButton.onclick = () => {
+    const selectedReviewers = [];
+    for (let i = 1; i <= 3; i++) {
+        const selectedReviewer = document.getElementById(`reviewer${index + 1}_${i}`).value;
+        selectedReviewers.push(selectedReviewer);
+    }
+
+    // Check if any of the reviewers have reached the limit
+    let hasReachedLimit = false;
+    selectedReviewers.forEach(reviewer => {
+        if (hasReachedReviewLimit(reviewer, reviewLimit)) {
+            alert(`Reviewer ${reviewer} has reached the review limit.`);
+            hasReachedLimit = true;
+        }
+    });
+    if (!hasReachedLimit) {
+        const paperId = index + 1; // Assuming paper ID is retrieved from the UI
+         const selectedReviewers = [];
+for (let i = 1; i <= 3; i++) {
+    const selectedReviewer = document.getElementById(`reviewer${index + 1}_${i}`).value;
+    selectedReviewers.push(selectedReviewer);
+}
+console.log("Paper ID:", paperId);
+    console.log("Selected Reviewers:", selectedReviewers);
+
+        fetch('/api/assign_reviewers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                paperId: paperId,
+                reviewers: selectedReviewers
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Reviewers assigned successfully:', data);
+            alert(`Reviewers assigned for Paper ID: ${paperId}`);
+            // Implement additional logic if needed
+        })
+        .catch(error => {
+            console.error('Error assigning reviewers:', error);
+            alert('An error occurred while assigning reviewers.');
+        });
+    }
+};
+
+    
+
+                    paperDetailsDiv.appendChild(assignButton);
+
+                    const buttonSpacer = document.createElement('span');
+                    buttonSpacer.style.marginRight = '10px';
+                    paperDetailsDiv.appendChild(buttonSpacer);
+
+                    const deadlineButton = document.createElement('button');
+                    deadlineButton.type = 'button';
+                    deadlineButton.className = 'button';
+                    deadlineButton.textContent = 'Set Deadline';
+                    deadlineButton.onclick = () => {
+                        const day = prompt('Enter day for deadline (1-31):');
+                        const month = prompt('Enter month for deadline (1-12):');
+                        const year = prompt('Enter year for deadline:');
+                        const deadline = new Date(year, month - 1, day);
+
+                        if (!isNaN(deadline.getTime())) {
+                            saveResponse({
+                                paperId: index + 1,
+                                action: 'Set Deadline',
+                                deadline: deadline.toDateString()
+                            });
+                            alert(`Deadline set for Paper ID: ${index + 1} - ${deadline.toDateString()}`);
+                            // Implement additional logic if needed
+                        } else {
+                            alert('Invalid date. Please enter a valid date for the deadline.');
+                        }
+                    };
+                    paperDetailsDiv.appendChild(deadlineButton);
+
+                    form.appendChild(paperDetailsDiv);
+                    papersSection.appendChild(form);
+                });
+            })
+            .catch(error => console.error('Error fetching paper details:', error));
+
+        function saveResponse(response) {
+            const savedResponses = JSON.parse(localStorage.getItem('savedResponses')) || [];
+            savedResponses.push(response);
+            localStorage.setItem('savedResponses', JSON.stringify(savedResponses));
+            alert('Response saved successfully.');
+        }
+
+        function hasReachedReviewLimit(reviewer, limit) {
+    // Assuming the review limit check is based on the saved responses in local storage
+    const savedResponses = JSON.parse(localStorage.getItem('savedResponses')) || [];
+    const reviewerReviews = savedResponses.filter(response => response.reviewers.includes(reviewer));
+    return reviewerReviews.length >= limit;
+}
+
+        function navigateToResponsesPage() {
+            window.location.href = "responses";
+        }
+
+        function clearSavedResponses() {
+            if (confirm('Are you sure you want to clear all saved responses?')) {
+                localStorage.removeItem('savedResponses');
+                alert('Saved responses cleared successfully.');
+            }
+        }
+    </script>
+    <div style="margin-top: 10px;">
+>>>>>>> 418c0ab32669f93fd65a38fb095e059765122124
     
         </div>
     

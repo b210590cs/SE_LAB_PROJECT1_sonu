@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.example.demo.Service.customUserDetailsService;
+import com.example.demo.Service.CustomUserDetailsService;
  
 @Configuration
 //@Configuration: Indicates that the class provides bean definitions that are used to configure the application context.
@@ -18,8 +18,13 @@ public class SecurityConfiguration   {
      
     @Bean
     //@Bean: Indicates that a method produces a bean to be managed by the Spring container.
+<<<<<<< HEAD
     customUserDetailsService userDetailsService() {
         return new customUserDetailsService();
+=======
+    UserDetailsService userDetailsService() {
+        return new CustomUserDetailsService();
+>>>>>>> 418c0ab32669f93fd65a38fb095e059765122124
     }
     //userDetailsService(): Returns an instance of customUserDetailsService to handle user details retrieval.
     

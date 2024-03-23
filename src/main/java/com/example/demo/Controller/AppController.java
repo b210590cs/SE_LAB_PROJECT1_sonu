@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.example.demo.Controller;
 //pakage -com.example.demo.Controller
 
@@ -100,3 +101,5 @@ public class AppController {
 	
 
 }
+=======
+>>>>>>> 418c0ab32669f93fd65a38fb095e059765122124
